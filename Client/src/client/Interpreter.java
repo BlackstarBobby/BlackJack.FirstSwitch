@@ -9,9 +9,22 @@ public class Interpreter {
 
     public Interpreter()
     {
-
+        communication = new Communication();
     }
 
+    public void interpret()
+    {
+        String message = (String)communication.receiveMessage();
+        if (message.equals("You Won"))
+            System.out.println(message);
+            else
+            System.out.println("You Lost");
+    }
+    public void play()
+    {
+        interpret();
+        // blah blah blah
+    }
 
 
 
