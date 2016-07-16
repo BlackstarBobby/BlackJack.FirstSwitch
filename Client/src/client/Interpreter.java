@@ -7,9 +7,9 @@ public class Interpreter {
 
     private Communication communication;
 
-    public Interpreter()
+    public Interpreter(Communication communication)
     {
-        communication = new Communication();
+        this.communication = communication;
     }
 
     public void interpret()

@@ -1,23 +1,53 @@
 package client;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Created by Cretu Calin on 7/16/2016.
  */
+
 public class Communication {
 
-    private Connection connection ;
+    Connection connection;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
 
-    public Communication()
-    {
-        connection = new Connection("93.115.22.101",1234);
+    public Communication(Connection connection){
+        setUpStreams();
     }
+
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
+
+    public void setOutput(ObjectOutputStream output)
+    {
+        this.output = output;
+    }
+    public ObjectInputStream getInput() {
+        return input;
+    }
+
+    public void setUpStreams() {
+        try {
+            output = new ObjectOutputStream(connection.getSocket().getOutputStream());
+            output.flush();
+            input = new ObjectInputStream(connection.getSocket().getInputStream());
+            System.out.println("Streams are up\n");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+
     public void sendMessage(String message)
     {
         try {
-            connection.getOutput().writeObject(message);
-            connection.getOutput().flush();
+            output.writeObject(message);
+            output.flush();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -27,7 +57,14 @@ public class Communication {
 
     public Object receiveMessage()
     {
-        return connection.getInput();
+        try {
+            return input.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

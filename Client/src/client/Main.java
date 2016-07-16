@@ -7,8 +7,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Interpreter client = new Interpreter();
+        Connection connection = new Connection("123.12.12.34", 1234);
+        Communication communication = new Communication(connection);
+        Interpreter client = new Interpreter(communication);
         client.play();
+
 
     }
 

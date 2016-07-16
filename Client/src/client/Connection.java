@@ -12,33 +12,22 @@ import java.net.UnknownHostException;
 
 public class Connection {
 
+
+
     private Socket socket;
     private String IP;
     private int port;
-
-
-    private ObjectInputStream input;
-
-    public ObjectOutputStream getOutput() {
-        return output;
-    }
-
-    private ObjectOutputStream output;
-
 
     Connection(String IP, int port)
     {
         this.IP = IP;
         this.port = port;
         connectToServer();
-        setUpStreams();
+
     }
 
-    public void setOutput(ObjectOutputStream output) {
-        this.output = output;
-    }
-    public ObjectInputStream getInput() {
-        return input;
+    public Socket getSocket() {
+        return socket;
     }
 
     private void connectToServer()
@@ -56,22 +45,7 @@ public class Connection {
         }
     }
 
-    public void setUpStreams() {
-        try {
-            output = new ObjectOutputStream(socket.getOutputStream());
-            output.flush();
-            input = new ObjectInputStream(socket.getInputStream());
-            System.out.println("Streams are up\n");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-
 
 }
+
+
