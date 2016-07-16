@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
  * Created by Cretu Calin on 7/16/2016.
  */
 
-public class Connect {
+public class Connection {
 
     private Socket socket;
     private String IP;
@@ -26,7 +26,7 @@ public class Connect {
     private ObjectOutputStream output;
 
 
-    Connect(String IP, int port)
+    Connection(String IP, int port)
     {
         this.IP = IP;
         this.port = port;
