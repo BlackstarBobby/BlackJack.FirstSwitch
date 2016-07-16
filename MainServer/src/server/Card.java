@@ -1,66 +1,44 @@
-package server;
+package deck;
 
+import java.io.Serializable;
 
-public class Card {
-    private int points;
+public class Card implements Serializable{
+
+    public static final long serialVersionUID = 1L;
+
     private int value;
-    private String suit;
-    public Card()
-    {
-        value=1;
-        suit="uninitialised";
-    }
-    public Card(String type, int value)
-    {
+    private String culori;
+
+    public Card(int value, String culori){
         this.value = value;
-        this.suit = type;
-        if (value < 12)
-            this.points = value;
-        else this.points = 10;//pentru ca punctajul J D K e de 10
+        this.culori = culori;
+
+    }
+
+    public int getValue(){
+    	if(value >= 10)
+    		return 10;
+    	return value;
     }
 
 
-    public int getPoints(){
-        return points;
-    }
-    public int getValue(){return value;}
-    public void setValue(int value)
-    {
-        this.value = value;
-    }
-    public String getSuit()
-    {
-        return suit;
-    }
-    public void setSuit(String suit)
-    {
-        this.suit = suit;
-    }
-
-
-    public String toString()
-    {
-        String result = "";
+    @Override
+    public String toString() {
         if(value == 1)
         {
-            result = "Ace of " + suit;
+            return "ace_of_" + culori;
         }
-        if(value == 12)
+        if(value == 11)
         {
-            result = "Jack of " + suit;
+            return "jack_of_" + culori;
+        }
+        if(value == 12) {
+            return "queen_of_" + culori;
         }
         if(value == 13)
         {
-            result = "Queen of " + suit;
+            return "king_of_" + culori;
         }
-        if(value == 14)
-        {
-            result = "King of " + suit;
-        }
-        if(value <= 10 && value != 1)
-        {
-            result = value + " of " + suit;
-        }
-        return result;
+        return value + "_of_" + culori;
     }
 }
