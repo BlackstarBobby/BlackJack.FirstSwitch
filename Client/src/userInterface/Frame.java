@@ -28,11 +28,15 @@ public class Frame extends JFrame {
 	int tablePanelheight;
 	int cardToPrint = 0;
 	BackgroundPanel panel_dealer;
-	int playerFocus;
+	int playerFocus = 4;
+	final Hand Clients[] = new Hand[5];
+	int player = 4;
+	final JLabel lblTurn[] = new JLabel[5];
+	final GridBagConstraints gbc_lblTurn[] = new GridBagConstraints[5];
+	JButton btnStand;
+	JButton btnHit;
+	//Communication communication;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -45,23 +49,64 @@ public class Frame extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public Frame() {
-
+	//public Frame(Communication communication) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 750, 650);
+		setBounds(100, 100, 900, 650);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{170, 170, 170, 170, 0};
+		gbl_contentPane.columnWidths = new int[]{220, 220, 220, 220, 0};
 		gbl_contentPane.rowHeights = new int[]{313, 0, 164, 19, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
+		
+		//this.communication = communication;
+		
+		btnHit = newButton(1,5,"HIT");
+		btnHit.setEnabled(false);
+		btnStand = newButton(2,5,"STAND");
+		btnStand.setEnabled(false);
+	
+		//HIT BUTTON
+		//*********************
+					
+			btnHit.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					if(cardToPrint<Clients[playerFocus].getCountLabels())
+					{
+						Deck deck = new Deck();
+						Card card = deck.getCard();
+						
+						//sendHit();
+						addCard(card);
+						setTotal(card.getValue());
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Hai gata...", "Error",JOptionPane.ERROR_MESSAGE);
+					}
+				}});
+			
+			
+		//HIT BUTTON
+		//*********************
+			
+		//STAND BUTTON
+		//*********************
+			btnStand.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					//objectInputStream("Stand"); ceva de gen
+				}
+			});
+		//STAND BUTTON
+		//*********************
+
+		enableButtons("Enter option: HIT/STAND");
 		
 	//DECK ICON
 	//*********************
@@ -76,7 +121,6 @@ public class Frame extends JFrame {
 		
 	//DEALER TABLE
 	//*********************
-		
 		tablePanelwidth = gbl_contentPane.columnWidths[1]+gbl_contentPane.columnWidths[2]+gbl_contentPane.columnWidths[3];
 		tablePanelheight = gbl_contentPane.rowHeights[0];
 		
@@ -84,7 +128,7 @@ public class Frame extends JFrame {
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
 		gbc_panel_2.gridwidth = 3;
-		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_2.gridx = 1;
 		gbc_panel_2.gridy = 0;
 		contentPane.add(panel_dealer, gbc_panel_2);
@@ -95,131 +139,42 @@ public class Frame extends JFrame {
 		
 		addDealerCard(card);
 		addInvisibleCard();	
-		
 	//*********************
 	//DEALER TABLE
 		
-	//CLIENT 1 TURN
+	//CLIENT 1-4 TURN
 	//*********************
-		final JLabel lblTurn1 = new JLabel("Client 1 Turn");
-		final GridBagConstraints gbc_lblTurn1 = new GridBagConstraints();
-		gbc_lblTurn1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblTurn1.gridx = 0;
-		gbc_lblTurn1.gridy = 1;
-		contentPane.add(lblTurn1, gbc_lblTurn1);
-	//CLIENT 1 TURN
-	//*********************
-		
-	final Hand Clients[] = new Hand[5];
-		
-	//CLIENT 1 HAND
+		for(int i = 1; i<5; i++)
+		{
+			lblTurn[i] = new JLabel("Client " + i + " Turn");
+			gbc_lblTurn[i] = new GridBagConstraints();
+			gbc_lblTurn[i].insets = new Insets(0, 0, 5, 5);
+			gbc_lblTurn[i].gridx = i-1;
+			gbc_lblTurn[i].gridy = 1;
+			contentPane.add(lblTurn[i], gbc_lblTurn[i]);
+		}
+	//CLIENT 1-4 TURN
 	//*********************
 		
-		JPanel Client1_panel = newPanel(0,2);
-		Clients[1] = new Hand(Client1_panel, 1);
-		Client1_panel.setVisible(true);
+	//CLIENTS HAND
 	//*********************
-	//CLIENT 1 HAND
-		
-	//OTHER CLIENT DEFAULT TEXT
+		Clients[1] = new Hand(newPanel(0,2), 1);
+		Clients[2] = new Hand(newPanel(1,2), 2);
+		Clients[3] = new Hand(newPanel(2,2), 3);
+		Clients[4] = new Hand(newPanel(3,2), 4);
 	//*********************
-		JPanel Client2_panel = newPanel(1,2);
-		Clients[2] = new Hand(Client2_panel, 2);
-		
-		JPanel Client3_panel = newPanel(2,2);
-		Clients[3] = new Hand(Client3_panel, 3);
-		
-		JPanel Client4_panel = newPanel(3,2);
-		Clients[4] = new Hand(Client4_panel, 4);
-	
-	//*********************
-	//OTHER CLIENT DEFAULT TEXT
+	//CLIENTS HANDS
 		
 	//CLIENT LABELS
 	//*********************
-		
 		JLabel Client1Label = newLabel(0,3,"Client1Label");
 		JLabel Client2Label	= newLabel(1,3,"Client2Label");
 		JLabel Client3Label = newLabel(2,3,"Client3Label");
 		JLabel Client4Label = newLabel(3,3,"Client4Label");
-		
 	//*********************
 	//CLIENT LABELS
 		
-	//HIT BUTTON
-	//*********************
-		final JButton btnHit = new JButton("HIT");
-				
-		btnHit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(cardToPrint<Clients[1].getCountLabels())
-				{
-					Deck deck = new Deck();
-					Card card = deck.getCard();
-				
-					ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
-					Clients[1].getLabel(cardToPrint).setIcon(new ImageIcon(cardBacktemp.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
-					Clients[1].getLabel(Clients[1].getCountLabels() - 1).setText("");
-					
-					lblTurn1.setText("Total " + card.getValue()); // AICI TREBUIE FACUT PRINT ARRAY DE TOTALURI, VECTORUL
-					contentPane.add(lblTurn1, gbc_lblTurn1);
-					cardToPrint++;
-				}
-				else
-					JOptionPane.showMessageDialog(null, "Hai gata...", "Error",JOptionPane.ERROR_MESSAGE);
-			}
-		});
 		
-		GridBagConstraints gbc_btnHit = new GridBagConstraints();
-		gbc_btnHit.insets = new Insets(0, 0, 0, 5);
-		gbc_btnHit.gridx = 1;
-		gbc_btnHit.gridy = 5;
-		contentPane.add(btnHit, gbc_btnHit);
-	//HIT BUTTON
-	//*********************
-		
-	//STAND BUTTON
-	//*********************
-		JButton btnStand = new JButton("STAND");
-		btnStand.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//objectInputStream("Stand"); ceva de gen
-			}
-		});
-		
-		GridBagConstraints gbc_btnStand = new GridBagConstraints();
-		gbc_btnStand.insets = new Insets(0, 0, 0, 5);
-		gbc_btnStand.gridx = 2;
-		gbc_btnStand.gridy = 5;
-		contentPane.add(btnStand, gbc_btnStand);
-	//STAND BUTTON
-	//*********************
-		
-	}
-
-	private JLabel newLabel(int pozx, int pozy, String string) {
-		{
-			JLabel label = new JLabel("New label");
-			GridBagConstraints gbc_label = new GridBagConstraints();
-			gbc_label.insets = new Insets(0, 0, 5, 5);
-			gbc_label.gridx = 1;
-			gbc_label.gridy = 1;
-			contentPane.add(label, gbc_label);
-		}
-		
-		JLabel temp = new JLabel(string);
-		GridBagConstraints gbc_temp = new GridBagConstraints();
-		gbc_temp.insets = new Insets(0, 0, 5, 5);
-		gbc_temp.gridx = pozx;
-		gbc_temp.gridy = pozy;
-		contentPane.add(temp, gbc_temp);
-		return temp;
-	}
-
-	void showCard(Card card, int playerNumber){
-		playerFocus = playerNumber;
-		ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
 	}
 	
 	public void addDealerCard(Card card){
@@ -237,22 +192,70 @@ public class Frame extends JFrame {
 		panel_dealer.add(otherCard);
 	}
 	
-	public JLabel imageToLabel(String path, int sizex, int sizey)
-	{
+	public JLabel imageToLabel(String path, int sizex, int sizey){
 		ImageIcon cardBack = new ImageIcon(getClass().getResource(path));
 		JLabel lblDeckimage = new JLabel(new ImageIcon(cardBack.getImage().getScaledInstance(sizex, sizey, java.awt.Image.SCALE_SMOOTH)));
 		return lblDeckimage;
 	}
 	
 	public JPanel newPanel (int pozx, int pozy){
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_1.gridx = pozx;
-		gbc_panel_1.gridy = pozy;
-		contentPane.add(panel_1, gbc_panel_1);
-		return panel_1;
+
+		CustomPanel panel = new CustomPanel(pozx, pozy);
+		contentPane.add(panel.getPane(), panel.getGBC());
+		return panel.getPane();
+	}
+	
+	private JLabel newLabel(int pozx, int pozy, String string) {
+		JLabel temp = new JLabel(string);
+		GridBagConstraints gbc_temp = new GridBagConstraints();
+		gbc_temp.insets = new Insets(0, 0, 5, 5);
+		gbc_temp.gridx = pozx;
+		gbc_temp.gridy = pozy;
+		contentPane.add(temp, gbc_temp);
+		return temp;
+	}
+	
+	private JButton newButton(int pozx, int pozy, String string){
+		JButton btn = new JButton(string);
+		btn.setEnabled(false);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.gridx = pozx;
+		gbc.gridy = pozy;
+		contentPane.add(btn, gbc);
+		return btn;
+	}
+	
+	public void setPlayerFocus (int x){
+		playerFocus = x;
+	}
+	
+	public void setPlayer(int playerNumber){
+		player = playerNumber;
+	}
+
+	public void addCard(Card card){
+		ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
+		Clients[playerFocus].getLabel(cardToPrint).setIcon(new ImageIcon(cardBacktemp.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
+		Clients[playerFocus].getLabel(Clients[playerFocus].getCountLabels() - 1).setText("");
+		cardToPrint++;
+	}
+	
+	public void setTotal(int total){
+		lblTurn[playerFocus].setText("Total " + total);
+		contentPane.add(lblTurn[playerFocus], gbc_lblTurn[playerFocus]);
+	}
+	
+	public void setStatus(String status){
+		lblTurn[playerFocus].setText(status);
+		contentPane.add(lblTurn[playerFocus], gbc_lblTurn[playerFocus]);
+		cardToPrint++;
+	}
+	
+	public void enableButtons(String string){
+		if(string.equals("Enter option: HIT/STAND")){
+			btnHit.setEnabled(true);
+			btnStand.setEnabled(true);
+		}
 	}
 };
