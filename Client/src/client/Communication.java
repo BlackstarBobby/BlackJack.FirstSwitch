@@ -1,5 +1,8 @@
 package client;
 
+import userInterface.Frame;
+
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,14 +14,26 @@ import java.io.ObjectOutputStream;
 
 public class Communication
 {
+
     Connection connection;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+
+
+
     //private Interpreter interpret;
+    private Frame frame;
+
 
     public Communication(Connection connection){
         this.connection=connection;
         setUpStreams();
+        startUserInterface();
+
+    }
+
+    public Frame getFrame() {
+        return frame;
     }
 
     public void setOutput(ObjectOutputStream output)
@@ -40,6 +55,8 @@ public class Communication
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+
     }
 
 
@@ -67,5 +84,17 @@ public class Communication
         return null;
     }
 
-
+    public void startUserInterface()
+    {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    frame = new Frame();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }
