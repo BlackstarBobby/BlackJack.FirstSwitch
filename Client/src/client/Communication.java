@@ -89,7 +89,7 @@ public class Communication
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    frame = new Frame();
+                    frame = new Frame(this);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();

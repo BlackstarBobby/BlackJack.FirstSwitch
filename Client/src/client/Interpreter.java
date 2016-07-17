@@ -65,7 +65,7 @@ public class Interpreter
                 else if (message.equals("BUSTED"))
                 {
                     System.out.println("Bust! You Lost");
-                    myTurn = true;
+                    myTurn = false;
                     break;
                 }
                 else if (message.equals("You Win") || message.equals("You Lost") || message.equals("Draw") || message.equals("Dealer BUSTED! You Win!"))
