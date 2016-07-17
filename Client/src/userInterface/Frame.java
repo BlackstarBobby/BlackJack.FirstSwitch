@@ -236,11 +236,19 @@ public class Frame extends JFrame {
 	}
 
 	public void addCard(Card card){
-		ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
-		Clients[playerFocus].getLabel(cardToPrint).setIcon(new ImageIcon(cardBacktemp.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
-		Clients[playerFocus].getLabel(Clients[playerFocus].getCountLabels() - 1).setText("");
-		cardToPrint++;
+		if(playerFocus == 0)
+			{
+				addDealerCard(card);
+			}
+			else
+			{
+				ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
+				Clients[playerFocus].getLabel(cardToPrint).setIcon(new ImageIcon(cardBacktemp.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
+				Clients[playerFocus].getLabel(Clients[playerFocus].getCountLabels() - 1).setText("");
+				cardToPrint++;
+			}
 	}
+
 	
 	public void setTotal(int total){
 		lblTurn[playerFocus].setText("Total " + total);

@@ -9,12 +9,10 @@ public class Main {
     public static void main(String[] args)
     {
 
-        Connection connection = new Connection("123.12.12.34", 1234);
+        Connection connection = new Connection("192.168.1.153", 80);
         Communication communication = new Communication(connection);
         Interpreter client = new Interpreter(communication);
         client.interpret();
-
-
 
     }
 
