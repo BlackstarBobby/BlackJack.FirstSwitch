@@ -8,24 +8,24 @@ import java.io.ObjectOutputStream;
  * Created by Cretu Calin on 7/16/2016.
  */
 
-public class Communication {
 
+public class Communication
+{
     Connection connection;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+    //private Interpreter interpret;
 
     public Communication(Connection connection){
+        this.connection=connection;
         setUpStreams();
-    }
-
-    public ObjectOutputStream getOutput() {
-        return output;
     }
 
     public void setOutput(ObjectOutputStream output)
     {
         this.output = output;
     }
+
     public ObjectInputStream getInput() {
         return input;
     }
