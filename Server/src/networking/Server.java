@@ -52,8 +52,6 @@ public class Server
             ioe.printStackTrace();
         }
 
-        waitForConnections();
-
     }
 
     public void waitForConnections()

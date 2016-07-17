@@ -10,13 +10,8 @@ public class Main
 {
     public static void main(String[] args)
     {
-       // Server server = new Server();
-    	Deck deck = new Deck();
-    	for (int i = 0; i < 52; i++)
-    	{
-    		Card card = deck.drawCard();
-    		System.out.println(card);
-    	}
+		Server server = new Server();
+		server.waitForConnections();
 
     }
 }
