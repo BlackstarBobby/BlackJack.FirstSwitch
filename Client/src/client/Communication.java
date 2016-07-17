@@ -11,11 +11,10 @@ import java.io.ObjectOutputStream;
  * Created by Cretu Calin on 7/16/2016.
  */
 
-
 public class Communication
 {
 
-    Connection connection;
+    private Connection connection;
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
@@ -86,15 +85,15 @@ public class Communication
 
     public void startUserInterface()
     {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
+       // EventQueue.invokeLater(new Runnable() {
+         //   public void run() {
+         //       try {
                     frame = new Frame(this);
                     frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+          //      } catch (Exception e) {
+           //         e.printStackTrace();
+           //     }
+         // /  }
+        //});
     }
 }

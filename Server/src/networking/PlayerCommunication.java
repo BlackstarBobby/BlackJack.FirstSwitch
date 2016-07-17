@@ -38,7 +38,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
             output.flush();
-
+            server.getThreads().get(turn).sendToClient("Your turn is " + (turn + 1));
             while(true)
             {
                 if(server.getTurn() == this.turn && server.isGameStarted() && !finished)

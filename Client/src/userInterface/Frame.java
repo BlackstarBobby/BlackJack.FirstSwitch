@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import client.Communication;
 import deck.Card;
 import deck.Deck;
 
@@ -35,13 +36,14 @@ public class Frame extends JFrame {
 	final GridBagConstraints gbc_lblTurn[] = new GridBagConstraints[5];
 	JButton btnStand;
 	JButton btnHit;
-	//Communication communication;
+	public static Communication communication;
+
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Frame frame = new Frame();
+					Frame frame = new Frame(communication);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,8 +52,8 @@ public class Frame extends JFrame {
 		});
 	}
 	
-	public Frame() {
-	//public Frame(Communication communication) {
+
+	public Frame(Communication communication) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 650);
 		contentPane = new JPanel();
@@ -64,7 +66,7 @@ public class Frame extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		//this.communication = communication;
+		this.communication = communication;
 		
 		btnHit = newButton(1,5,"HIT");
 		btnHit.setEnabled(false);
@@ -79,12 +81,11 @@ public class Frame extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					if(cardToPrint<Clients[playerFocus].getCountLabels())
 					{
-						Deck deck = new Deck();
-						Card card = deck.getCard();
-						
-						//sendHit();
-						addCard(card);
-						setTotal(card.getValue());
+//						Deck deck = new Deck();
+//						Card card = deck.getCard();
+						communication.sendMessage("HIT!");
+//						addCard(card);
+//						setTotal(card.getValue());
 					}
 					else
 					{
@@ -106,7 +107,7 @@ public class Frame extends JFrame {
 		//STAND BUTTON
 		//*********************
 
-		enableButtons("Enter option: HIT/STAND");
+		//enableButtons();
 		
 	//DECK ICON
 	//*********************
@@ -176,7 +177,7 @@ public class Frame extends JFrame {
 		
 		
 	}
-	
+
 	public void addDealerCard(Card card){
 		
 		JLabel cardDealer = new JLabel();
@@ -252,10 +253,9 @@ public class Frame extends JFrame {
 		cardToPrint++;
 	}
 	
-	public void enableButtons(String string){
-		if(string.equals("Enter option: HIT/STAND")){
+	public void enableButtons(){
 			btnHit.setEnabled(true);
 			btnStand.setEnabled(true);
-		}
+
 	}
 };

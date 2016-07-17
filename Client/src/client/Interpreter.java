@@ -9,8 +9,7 @@ public class Interpreter
 {
 
     private Communication communication;
-    Object messageReceived;
-    boolean myTurn;
+    private boolean myTurn;
 
     public Interpreter(Communication communication)
     {
@@ -36,17 +35,17 @@ public class Interpreter
 
     public void interpret()
     {
-        messageReceived =  communication.receiveMessage();
+        Object messageReceived = communication.receiveMessage();
 
         while(messageReceived != null)
         {
             if (messageReceived instanceof Card)
             {
-                communication.getFrame().addCard((Card)messageReceived);
+                communication.getFrame().addCard((Card) messageReceived);
             }
             if (messageReceived instanceof Integer)
             {
-                communication.getFrame().setTotal(((int)messageReceived));
+                communication.getFrame().setTotal(((int) messageReceived));
             }
             if (messageReceived instanceof String)
             {
@@ -62,13 +61,24 @@ public class Interpreter
                     communication.getFrame().setPlayerFocus(4);
                 else if (message.equals("Dealer"))
                     communication.getFrame().setPlayerFocus(5);
-                else if (message.equals("BUSTED"))
+                else if (message.equals("Your turn is 1"))
+                    communication.getFrame().setPlayer(1);
+                else if (message.equals("Your turn is 2"))
+                    communication.getFrame().setPlayer(2);
+                else if (message.equals("Your turn is 3"))
+                    communication.getFrame().setPlayer(3);
+                else if (message.equals("Your turn is 4"))
+                    communication.getFrame().setPlayer(4);
+                else if (message.equals("BUST"))
                 {
-                    System.out.println("Bust! You Lost");
-                    myTurn = false;
+                    if (myTurn==true)
+                    {
+                        communication.getFrame().setStatus(message);
+                        myTurn = false;
+                    }
                     break;
                 }
-                else if (message.equals("You Win") || message.equals("You Lost") || message.equals("Draw") || message.equals("Dealer BUSTED! You Win!"))
+                else if (message.equals("WIN") || message.equals("LOSE") || message.equals("DRAW") || message.equals("Dealer BUSTED! You Win!"))
                 {
                     communication.getFrame().setStatus(message);
                     myTurn=false;
@@ -76,12 +86,10 @@ public class Interpreter
                 }
                 else if(message.equals("Enter option: HIT/STAND"))
                 {
-                    communication.getFrame().enterOptins();
+                   communication.getFrame().enableButtons();
+                    myTurn=true;
                 }
-                else
-                {
-                    System.out.println(message);
-                }
+
             }
             messageReceived = communication.getInput();
 

@@ -58,6 +58,7 @@ public class GameLogic
         {
             for(int j = 0; j < server.getNumberOfPlayers(); j++)
             {
+
                 server.getThreads().get(j).sendToClient("Player" + (i + 1));
                 server.getThreads().get(j).sendToClient(server.getThreads().get(i).getCards().get(0));
                 server.getThreads().get(j).sendToClient(server.getThreads().get(i).getCards().get(1));
