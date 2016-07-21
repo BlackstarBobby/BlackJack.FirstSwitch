@@ -1,4 +1,6 @@
 package client;
+import javax.swing.SwingUtilities;
+
 import deck.Card;
 
 /**
@@ -15,83 +17,118 @@ public class Interpreter
     {
         this.communication = communication;
         myTurn = false;
-
     }
-    // setPlayerFocus(int playerFocus);
-    // addCard(Card card);
-    // setTotal(int total);
-    // setStatus(String status);
-    //
-    //String
-    //it's your turn blah -> // face un boolean my turn ->  il face true -> activam butoanele
-    // if esle
-    //bust -> my turn true Jdiagol cu YOU BUST!
-    // if not -> setezi la totalul playerului busted
-    //win lose draw
-    //dealer;s turn -> SETAM panelul la dealer si stregem cartea cu fata in jos
-    //else ->setam panelul -> primim player x
-    //Card -> o punem in panelul in care suntem
-    //INTEGER -> set total in panelul curent
+    // trebuie rezivuit pentru ca sunt probleme la trimiterea cartilor
+    // nu stii care carti iti apartin -> (treaba facuta in interfata grafica
 
-    public void interpret()
+    public void interpretTerminal()
     {
         Object messageReceived = communication.receiveMessage();
 
-        while(messageReceived != null)
-        {
-            if (messageReceived instanceof Card)
-            {
-                communication.getFrame().addCard((Card) messageReceived);
+        label:
+        while (messageReceived != null) {
+
+            if (messageReceived instanceof Card) {
+                System.out.println("You get" + (Card)messageReceived);
             }
-            if (messageReceived instanceof Integer)
-            {
-                communication.getFrame().setTotal(((int) messageReceived));
+            if (messageReceived instanceof Integer) {
+                System.out.println("Your total is" + (int) messageReceived);
             }
             if (messageReceived instanceof String)
             {
                 String message = messageReceived.toString();
+                if (message.equals("BUSTED"))
+                {
+                    System.out.println("Bust! You Lost");
+                    break;
+                }
+                else if (message.equals("You Win") || message.equals("You Lost") || message.equals("Draw") || message.equals("Dealer BUSTED! You Win!"))
+                {
+                    System.out.println(message);
+                    break;
+                }
+//                else
+//                {
+//                    System.out.println(message);
+//                }
+            }
+            messageReceived = communication.receiveMessage();
 
-                if (message.equals("Player 1"))
-                    communication.getFrame().setPlayerFocus(1);
-                else if (message.equals("Player 2"))
-                    communication.getFrame().setPlayerFocus(2);
-                else if (message.equals("Player 3"))
-                    communication.getFrame().setPlayerFocus(3);
-                else if (message.equals("Player 4"))
-                    communication.getFrame().setPlayerFocus(4);
-                else if (message.equals("Dealer"))
-                    communication.getFrame().setPlayerFocus(5);
-                else if (message.equals("Your turn is 1"))
-                    communication.getFrame().setPlayer(1);
-                else if (message.equals("Your turn is 2"))
-                    communication.getFrame().setPlayer(2);
-                else if (message.equals("Your turn is 3"))
-                    communication.getFrame().setPlayer(3);
-                else if (message.equals("Your turn is 4"))
-                    communication.getFrame().setPlayer(4);
-                else if (message.equals("BUST"))
-                {
-                    if (myTurn==true)
-                    {
+        }
+    }
+
+    public void interpret()
+    {
+
+        Object messageReceived = communication.receiveMessage();
+
+        label:
+        while (messageReceived != null) {
+            if (messageReceived instanceof Card) {
+                communication.getFrame().addCard((Card) messageReceived);
+            }
+            if (messageReceived instanceof Integer) {
+                communication.getFrame().setTotal(((int) messageReceived));
+            }
+            if (messageReceived instanceof String) {
+                String message = messageReceived.toString();
+
+                switch (message) {
+                    case "Player 1":
+                        communication.getFrame().setPlayerFocus(1);
+                        break;
+                    case "Player 2":
+                        communication.getFrame().setPlayerFocus(2);
+                        break;
+                    case "Player 3":
+                        communication.getFrame().setPlayerFocus(3);
+                        break;
+                    case "Player 4":
+                        communication.getFrame().setPlayerFocus(4);
+                        break;
+                    case "Dealer":
+                        communication.getFrame().setPlayerFocus(0);
+                        break;
+                    case "Your turn is 1":
+                        communication.getFrame().setPlayer(1);
+                        break;
+                    case "Your turn is 2":
+                        communication.getFrame().setPlayer(2);
+                        break;
+                    case "Your turn is 3":
+                        communication.getFrame().setPlayer(3);
+                        break;
+                    case "Your turn is 4":
+                        communication.getFrame().setPlayer(4);
+                        break;
+                    case "BUST":
+                        if (myTurn) {
+                            communication.getFrame().setStatus(message);
+                            communication.getFrame().setFinalMessage(message);
+                            communication.getFrame().disableButtons();
+                            myTurn = false;
+                            break label;
+                        } else {
+                            communication.getFrame().setTotal(22);
+                        }
+                        break;
+                    case "WIN":
+                    case "LOSE":
+                    case "DRAW":
+                    case "Dealer Busted! You Win":
                         communication.getFrame().setStatus(message);
+                        communication.getFrame().setFinalMessage(message);
+                        communication.getFrame().disableButtons();
                         myTurn = false;
-                    }
-                    break;
-                }
-                else if (message.equals("WIN") || message.equals("LOSE") || message.equals("DRAW") || message.equals("Dealer BUSTED! You Win!"))
-                {
-                    communication.getFrame().setStatus(message);
-                    myTurn=false;
-                    break;
-                }
-                else if(message.equals("Enter option: HIT/STAND"))
-                {
-                   communication.getFrame().enableButtons();
-                    myTurn=true;
+                        break label;
+                    case "Enter option: HIT/STAND":
+                        communication.getFrame().enableButtons();
+                        myTurn = true;
+                        break;
                 }
 
             }
-            messageReceived = communication.getInput();
+            messageReceived = communication.receiveMessage();
 
         }
     }

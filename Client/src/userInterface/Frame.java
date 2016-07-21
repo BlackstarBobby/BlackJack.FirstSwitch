@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import client.Communication;
@@ -20,7 +22,6 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JLayeredPane;
 
 public class Frame extends JFrame {
 
@@ -30,8 +31,13 @@ public class Frame extends JFrame {
 	int cardToPrint = 0;
 	BackgroundPanel panel_dealer;
 	int playerFocus = 4;
-	final Hand Clients[] = new Hand[5];
+	final Hand clients[] = new Hand[5];
 	int player = 4;
+	
+	private JLabel client1Label;
+	private JLabel client2Label;
+	private JLabel client3Label;
+	private JLabel client4Label;
 	final JLabel lblTurn[] = new JLabel[5];
 	final GridBagConstraints gbc_lblTurn[] = new GridBagConstraints[5];
 	JButton btnStand;
@@ -39,18 +45,18 @@ public class Frame extends JFrame {
 	public static Communication communication;
 
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Frame frame = new Frame(communication);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Frame frame = new Frame(communication);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	
 
 	public Frame(Communication communication) {
@@ -79,11 +85,22 @@ public class Frame extends JFrame {
 			btnHit.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					if(cardToPrint<Clients[playerFocus].getCountLabels())
+					if(cardToPrint< clients[playerFocus].getCountLabels())
 					{
 //						Deck deck = new Deck();
 //						Card card = deck.getCard();
-						communication.sendMessage("HIT!");
+						SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>()
+						{
+
+							@Override
+							protected Void doInBackground() throws Exception {
+								// TODO Auto-generated method stub
+								communication.sendHit();
+								return null;
+							}
+							
+						};
+						worker.execute();
 //						addCard(card);
 //						setTotal(card.getValue());
 					}
@@ -102,6 +119,19 @@ public class Frame extends JFrame {
 			btnStand.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					//objectInputStream("Stand"); ceva de gen
+					SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>()
+					{
+
+						@Override
+						protected Void doInBackground() throws Exception {
+							// TODO Auto-generated method stub
+							communication.sendStand();
+							disableButtons();
+							return null;
+						}
+						
+					};
+					worker.execute();
 				}
 			});
 		//STAND BUTTON
@@ -114,7 +144,7 @@ public class Frame extends JFrame {
 		JPanel panelDeck = new JPanel();
 		panelDeck = newPanel(0,0);
 		JLabel lblDeckImage = new JLabel();
-		lblDeckImage = imageToLabel("/userInterface/other/Card-Back.png",190,280);
+		lblDeckImage = imageToLabel("/cards/Card-Back.png",190,280);
 		lblDeckImage.setBounds(9, 5, 190, 280);
 		panelDeck.add(lblDeckImage);
 	//*********************
@@ -135,11 +165,11 @@ public class Frame extends JFrame {
 		contentPane.add(panel_dealer, gbc_panel_2);
 		panel_dealer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		Deck deck = new Deck();
-		Card card = deck.getCard();
+		//Deck deck = new Deck();
+		//Card card = deck.drawCard();
 		
-		addDealerCard(card);
-		addInvisibleCard();	
+		//addDealerCard(card);
+		//addInvisibleCard();
 	//*********************
 	//DEALER TABLE
 		
@@ -159,36 +189,36 @@ public class Frame extends JFrame {
 		
 	//CLIENTS HAND
 	//*********************
-		Clients[1] = new Hand(newPanel(0,2), 1);
-		Clients[2] = new Hand(newPanel(1,2), 2);
-		Clients[3] = new Hand(newPanel(2,2), 3);
-		Clients[4] = new Hand(newPanel(3,2), 4);
+		clients[1] = new Hand(newPanel(0,2), 1);
+		clients[2] = new Hand(newPanel(1,2), 2);
+		clients[3] = new Hand(newPanel(2,2), 3);
+		clients[4] = new Hand(newPanel(3,2), 4);
 	//*********************
 	//CLIENTS HANDS
 		
 	//CLIENT LABELS
 	//*********************
-		JLabel Client1Label = newLabel(0,3,"Client1Label");
-		JLabel Client2Label	= newLabel(1,3,"Client2Label");
-		JLabel Client3Label = newLabel(2,3,"Client3Label");
-		JLabel Client4Label = newLabel(3,3,"Client4Label");
+		client1Label = newLabel(0,3,"Client1");
+		client2Label = newLabel(1,3,"Client2");
+		client3Label = newLabel(2,3,"Client3");
+		client4Label = newLabel(3,3,"Client4");
 	//*********************
 	//CLIENT LABELS
 		
 		
 	}
 
-	public void addDealerCard(Card card){
-		
+	public void addDealerCard(Card card)
+	{
 		JLabel cardDealer = new JLabel();
-		ImageIcon cardOfDealer = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
+		ImageIcon cardOfDealer = new ImageIcon(getClass().getResource("/cards/" + card.toString() + ".png"));
 		cardDealer.setIcon(new ImageIcon(cardOfDealer.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
 		panel_dealer.add(cardDealer);
 	}
 	
 	public void addInvisibleCard(){
 		JLabel otherCard = new JLabel();
-		ImageIcon backOfCard = new ImageIcon(getClass().getResource("/userInterface/other/Card-Back.png"));
+		ImageIcon backOfCard = new ImageIcon(getClass().getResource("/cards/Card-Back.png"));
 		otherCard.setIcon(new ImageIcon(backOfCard.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
 		panel_dealer.add(otherCard);
 	}
@@ -229,29 +259,42 @@ public class Frame extends JFrame {
 	
 	public void setPlayerFocus (int x){
 		playerFocus = x;
+		
 	}
 	
 	public void setPlayer(int playerNumber){
 		player = playerNumber;
+		if(playerNumber == 1)
+			client1Label.setText("YOU");
+		if(playerNumber == 2)
+			client2Label.setText("YOU");
+		if(playerNumber == 3)
+			client3Label.setText("YOU");
+		if(playerNumber == 4)
+			client4Label.setText("YOU");
 	}
 
 	public void addCard(Card card){
+		
 		if(playerFocus == 0)
 			{
 				addDealerCard(card);
 			}
 			else
 			{
-				ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/userInterface/cards/" + card.toString() + ".png"));
-				Clients[playerFocus].getLabel(cardToPrint).setIcon(new ImageIcon(cardBacktemp.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
-				Clients[playerFocus].getLabel(Clients[playerFocus].getCountLabels() - 1).setText("");
+				ImageIcon cardBacktemp = new ImageIcon(getClass().getResource("/cards/" + card.toString() + ".png"));
+				clients[playerFocus].getLabel(cardToPrint).setIcon(new ImageIcon(cardBacktemp.getImage().getScaledInstance(100, 150, java.awt.Image.SCALE_SMOOTH)));
+				clients[playerFocus].getLabel(clients[playerFocus].getCountLabels() - 1).setText("");
 				cardToPrint++;
 			}
 	}
 
 	
 	public void setTotal(int total){
-		lblTurn[playerFocus].setText("Total " + total);
+		if (total > 21)
+			lblTurn[playerFocus].setText("Total BUST");
+		else
+			lblTurn[playerFocus].setText("Total " + total);
 		contentPane.add(lblTurn[playerFocus], gbc_lblTurn[playerFocus]);
 	}
 	
@@ -264,6 +307,16 @@ public class Frame extends JFrame {
 	public void enableButtons(){
 			btnHit.setEnabled(true);
 			btnStand.setEnabled(true);
-
+	}
+	
+	public void disableButtons()
+	{
+		btnHit.setEnabled(false);
+		btnStand.setEnabled(false);
+	}
+	
+	public void setFinalMessage(String message)
+	{
+		JOptionPane.showMessageDialog(null, message, "Rezultat",JOptionPane.INFORMATION_MESSAGE);
 	}
 };

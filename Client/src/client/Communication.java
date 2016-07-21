@@ -2,6 +2,7 @@ package client;
 
 import userInterface.Frame;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,6 +18,7 @@ public class Communication
     private Connection connection;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+    private Communication thisCommunication;
 
 
 
@@ -26,9 +28,8 @@ public class Communication
 
     public Communication(Connection connection){
         this.connection=connection;
+        thisCommunication = this;
         setUpStreams();
-        startUserInterface();
-
     }
 
     public Frame getFrame() {
@@ -70,7 +71,25 @@ public class Communication
         }
 
     }
+    public void sendHit()
+    {
+        try {
+            output.writeObject("HIT");
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
+    public void sendStand()
+    {
+        try {
+            output.writeObject("STAND");
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public Object receiveMessage()
     {
         try {
@@ -83,17 +102,20 @@ public class Communication
         return null;
     }
 
-    public void startUserInterface()
-    {
-       // EventQueue.invokeLater(new Runnable() {
-         //   public void run() {
-         //       try {
-                    frame = new Frame(this);
+    public void startUserInterface() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    frame = new Frame(thisCommunication);
                     frame.setVisible(true);
-          //      } catch (Exception e) {
-           //         e.printStackTrace();
-           //     }
-         // /  }
-        //});
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+
 }
+

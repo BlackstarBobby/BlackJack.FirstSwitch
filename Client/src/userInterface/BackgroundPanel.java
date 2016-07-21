@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class BackgroundPanel extends JPanel{
@@ -12,12 +13,14 @@ public class BackgroundPanel extends JPanel{
     {
         try
         {
-        	ImageIcon dealerTable = new ImageIcon(getClass().getResource("/userInterface/other/dealer-table.jpg"));
-		    image = dealerTable.getImage().getScaledInstance(tablePanelwidth, tablePanelheight, java.awt.Image.SCALE_DEFAULT);            }
+        	ImageIcon dealerTable = new ImageIcon(getClass().getResource("/cards/dealer-table.jpg"));
+		    image = dealerTable.getImage().getScaledInstance(tablePanelwidth, tablePanelheight, java.awt.Image.SCALE_DEFAULT); 
+		 }
         catch (Exception e) { /*handled in paintComponent()*/ }
+        
     }
 	@Override
-	  protected void paintComponent(Graphics g) {
+	  public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g); 
         if (image != null)

@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 public class Hand {
 	
 	JPanel panel;
-	JLabel labels[] = new JLabel[6];
+	JLabel labels[] = new JLabel[20];
 
 	Hand(JPanel panel, int clientNumber)
 	{
