@@ -10,12 +10,11 @@ public class Main {
 
     public static void main(String[] args)
     {
-
         Connection connection = new Connection("localhost",9797);
         Communication communication = new Communication(connection);
         Interpreter interpreter = new Interpreter(communication);
         Client client = new Client(interpreter, communication);
-        client.chooseHowToPlay();
+        client.startInitialFrame();
 
     }
 

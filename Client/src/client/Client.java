@@ -1,6 +1,7 @@
 package client;
 
 import userInterface.Frame;
+import userInterface.InitialFrame;
 
 import javax.swing.*;
 import java.util.Scanner;
@@ -10,26 +11,38 @@ import java.util.Scanner;
  */
 public class Client {
 
-    Interpreter interpreter;
-    Communication communication;
-    Frame frame;
+    private Interpreter interpreter;
+    private Communication communication;
+    private InitialFrame initialFrame ;
+    private Client thisClient;
+
 
     Client(Interpreter interpreter, Communication communication)
     {
         this.interpreter = interpreter;
         this.communication = communication;
+        this.initialFrame = new InitialFrame(this);
+        thisClient = this;
     }
 
     public void chooseHowToPlay()
     {
-        String answer;
-        Scanner scan = new Scanner(System.in);
-        System.out.println("TERMINAL / UI ?");
-        answer = scan.nextLine();
-        if(answer.equals("TERMINAL"))
-            playTerminal();
-        else
-            playUserInterface();
+
+
+    }
+
+    public void startInitialFrame() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    initialFrame = new InitialFrame(thisClient);
+                    initialFrame.setVisible(true);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void playUserInterface()
