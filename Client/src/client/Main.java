@@ -14,7 +14,7 @@ public class Main {
         Communication communication = new Communication(connection);
         Interpreter interpreter = new Interpreter(communication);
         Client client = new Client(interpreter, communication);
-        client.startInitialFrame();
+        client.chooseHowToPlay();
 
     }
 

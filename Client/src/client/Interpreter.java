@@ -9,7 +9,6 @@ import deck.Card;
 
 public class Interpreter
 {
-
     private Communication communication;
     private boolean myTurn;
 
@@ -25,39 +24,34 @@ public class Interpreter
     {
         Object messageReceived = communication.receiveMessage();
 
-        label:
         while (messageReceived != null) {
 
             if (messageReceived instanceof Card) {
-                System.out.println("You get" + (Card)messageReceived);
+                System.out.println("You get" + (Card) messageReceived);
             }
             if (messageReceived instanceof Integer) {
                 System.out.println("Your total is" + (int) messageReceived);
             }
-            if (messageReceived instanceof String)
-            {
+            if (messageReceived instanceof String) {
                 String message = messageReceived.toString();
-                if (message.equals("BUSTED"))
-                {
+                if (message.equals("BUSTED")) {
                     System.out.println("Bust! You Lost");
                     break;
-                }
-                else if (message.equals("You Win") || message.equals("You Lost") || message.equals("Draw") || message.equals("Dealer BUSTED! You Win!"))
-                {
+                } else if (message.equals("You Win") || message.equals("You Lost") || message.equals("Draw") || message.equals("Dealer BUSTED! You Win!")) {
                     System.out.println(message);
                     break;
                 }
-//                else
-//                {
-//                    System.out.println(message);
-//                }
+                else
+                {
+                    System.out.println(message);
+                }
             }
             messageReceived = communication.receiveMessage();
 
         }
     }
 
-    public void interpret()
+    public void interpretForUI()
     {
 
         Object messageReceived = communication.receiveMessage();
@@ -67,10 +61,10 @@ public class Interpreter
             if (messageReceived instanceof Card) {
                 communication.getFrame().addCard((Card) messageReceived);
             }
-            if (messageReceived instanceof Integer) {
+            else if (messageReceived instanceof Integer) {
                 communication.getFrame().setTotal(((int) messageReceived));
             }
-            if (messageReceived instanceof String) {
+            else if (messageReceived instanceof String) {
                 String message = messageReceived.toString();
 
                 switch (message) {

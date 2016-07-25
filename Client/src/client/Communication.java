@@ -21,7 +21,6 @@ public class Communication
     private Communication thisCommunication;
 
 
-
     //private Interpreter interpret;
     private Frame frame;
 
@@ -109,12 +108,14 @@ public class Communication
                     frame = new Frame(thisCommunication);
                     frame.setVisible(true);
 
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
     }
+
 
 
 }

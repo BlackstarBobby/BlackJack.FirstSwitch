@@ -9,12 +9,17 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class InitialFrame extends JFrame {
 
     private JPanel contentPane;
     private JTextField txtLittleJockFrom;
     private Client client;
+    JFormattedTextField frmtdtxtfldUserNmae;
 
     /**
      * Launch the application.
@@ -39,6 +44,11 @@ public class InitialFrame extends JFrame {
 
     public InitialFrame(Client client) {
         this.client = client;
+        InitialFrame thisInitialFrame = this;
+
+
+
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 428, 298);
         contentPane = new JPanel();
@@ -58,13 +68,15 @@ public class InitialFrame extends JFrame {
 
                     @Override
                     protected Void doInBackground() throws Exception {
-                        // TODO Auto-generated method stub
+
+                        thisInitialFrame.setVisible(false);
                         client.playUserInterface();
                         return null;
                     }
 
                 };
                 worker.execute();
+
             }
         });
         userInterfaceButton.setBounds(27, 217, 175, 33);
@@ -79,6 +91,7 @@ public class InitialFrame extends JFrame {
                     @Override
                     protected Void doInBackground() throws Exception {
                         // TODO Auto-generated method stub
+                        thisInitialFrame.setVisible(false);
                         client.playTerminal();
                         return null;
                     }
@@ -100,18 +113,31 @@ public class InitialFrame extends JFrame {
         txtpnPleaseEnterYour.setBounds(27, 110, 175, 33);
         contentPane.add(txtpnPleaseEnterYour);
 
-        JFormattedTextField frmtdtxtfldSalutate = new JFormattedTextField();
-        frmtdtxtfldSalutate.setBounds(212, 110, 179, 33);
-        contentPane.add(frmtdtxtfldSalutate);
+        frmtdtxtfldUserNmae = new JFormattedTextField();
+        frmtdtxtfldUserNmae.setBounds(212, 110, 179, 33);
+        contentPane.add(frmtdtxtfldUserNmae);
 
+
+// panel for joke
         txtLittleJockFrom = new JTextField();
         txtLittleJockFrom.setBackground(Color.LIGHT_GRAY);
         txtLittleJockFrom.setFont(txtLittleJockFrom.getFont().deriveFont(11f));
         txtLittleJockFrom.setEditable(false);
-        txtLittleJockFrom.setText("Little jock from the web");
+        //txtLittleJockFrom.setText("Little jock from the web");
         txtLittleJockFrom.setBounds(27, 11, 365, 73);
         contentPane.add(txtLittleJockFrom);
         txtLittleJockFrom.setColumns(10);
+
+
+    }
+    public void setJoke(String joke)
+    {
+        txtLittleJockFrom.setText(joke);
+    }
+
+    public void setUsername(String username)
+    {
+        frmtdtxtfldUserNmae.setText(username);
     }
 }
 
