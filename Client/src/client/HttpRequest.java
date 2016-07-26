@@ -1,6 +1,5 @@
 package client;
 
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -50,7 +49,22 @@ public class HttpRequest {
 
         while ((inputLine = in.readLine()) != null) {
             //System.out.println(inputLine);
-            response.append(inputLine);
+//            boolean insideQuotes = false;
+//            for (int i =0 ; i < inputLine.length(); i++)
+//            {
+//                if(inputLine.charAt(i)== '"' && !insideQuotes)
+//                {
+//                    insideQuotes = true;
+//                }
+//                if(inputLine.charAt(i)== '"' && insideQuotes)
+//                {
+//                    insideQuotes = false;
+//                }
+//                if (insideQuotes)
+//                    response.append(inputLine.charAt(i));
+//            }
+//
+        response.append((String)inputLine);
         }
         in.close();
 

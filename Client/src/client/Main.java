@@ -15,7 +15,6 @@ public class Main {
         Interpreter interpreter = new Interpreter(communication);
         Client client = new Client(interpreter, communication);
         client.chooseHowToPlay();
-
     }
 
 }

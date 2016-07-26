@@ -9,10 +9,7 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class InitialFrame extends JFrame {
 
@@ -21,34 +18,9 @@ public class InitialFrame extends JFrame {
     private Client client;
     JFormattedTextField frmtdtxtfldUserNmae;
 
-    /**
-     * Launch the application.
-     */
-//    public static void main(String[] args) {
-//        EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                try {
-//                    InitialFrame frame = new InitialFrame(client);
-//                    frame.setVisible(true);
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
-
-    /**
-     * Create the frame.
-     */
-
     public InitialFrame(Client client) {
         this.client = client;
         InitialFrame thisInitialFrame = this;
-
-
-
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 428, 298);
         contentPane = new JPanel();
@@ -69,7 +41,11 @@ public class InitialFrame extends JFrame {
                     @Override
                     protected Void doInBackground() throws Exception {
 
+
+
                         thisInitialFrame.setVisible(false);
+                        writeUserNameInFile();
+                        System.out.println(frmtdtxtfldUserNmae.getText());
                         client.playUserInterface();
                         return null;
                     }
@@ -92,6 +68,7 @@ public class InitialFrame extends JFrame {
                     protected Void doInBackground() throws Exception {
                         // TODO Auto-generated method stub
                         thisInitialFrame.setVisible(false);
+                        writeUserNameInFile();
                         client.playTerminal();
                         return null;
                     }
@@ -113,6 +90,7 @@ public class InitialFrame extends JFrame {
         txtpnPleaseEnterYour.setBounds(27, 110, 175, 33);
         contentPane.add(txtpnPleaseEnterYour);
 
+        // User name
         frmtdtxtfldUserNmae = new JFormattedTextField();
         frmtdtxtfldUserNmae.setBounds(212, 110, 179, 33);
         contentPane.add(frmtdtxtfldUserNmae);
@@ -139,5 +117,18 @@ public class InitialFrame extends JFrame {
     {
         frmtdtxtfldUserNmae.setText(username);
     }
+
+    private void writeUserNameInFile()
+    {
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter("C:\\Users\\usseerr\\Desktop\\BJ\\ClientV2\\src\\userInterface\\username.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        pw.write(frmtdtxtfldUserNmae.getText());
+        pw.close();
+    }
+
 }
 

@@ -1,6 +1,6 @@
 package userInterface;
 
-import java.awt.EventQueue;
+import java.awt.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -15,10 +15,6 @@ import deck.Deck;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,22 +38,10 @@ public class Frame extends JFrame {
 	final GridBagConstraints gbc_lblTurn[] = new GridBagConstraints[5];
 	JButton btnStand;
 	JButton btnHit;
+    JButton btnNewGame;
 	public static Communication communication;
 
 
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Frame frame = new Frame(communication);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
 
 	public Frame(Communication communication) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,8 +62,31 @@ public class Frame extends JFrame {
 		btnHit.setEnabled(false);
 		btnStand = newButton(2,5,"STAND");
 		btnStand.setEnabled(false);
-	
-		//HIT BUTTON
+        btnNewGame = newButton(0,5,"New Game");
+        btnNewGame.setEnabled(false);
+
+
+
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Frame frame = new Frame(communication);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+        //New Game Button
+    //**********************
+        btnNewGame.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent arg0) {
+                        System.out.println("Test New Game");
+                    }
+                });
+            //HIT BUTTON
 		//*********************
 					
 			btnHit.addActionListener(new ActionListener() {
@@ -308,6 +315,15 @@ public class Frame extends JFrame {
 			btnHit.setEnabled(true);
 			btnStand.setEnabled(true);
 	}
+
+    public void enableNewGame(){
+        btnNewGame.setEnabled(true);
+    }
+
+    public void disableNewGame()
+    {
+        btnNewGame.setEnabled(false);
+    }
 	
 	public void disableButtons()
 	{
