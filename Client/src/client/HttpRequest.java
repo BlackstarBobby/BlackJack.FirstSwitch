@@ -12,17 +12,21 @@ public class HttpRequest {
 
     private final String USER_AGENT = "";
 
-//    public static void main(String[] args) throws Exception {
-//
-//        HttpRequest http = new HttpRequest();
-//
-//        //System.out.println("Testing 1 - Send Http GET request");
-//        http.sendGet();
-//
-//        //      System.out.println("\nTesting 2 - Send Http POST request");
-//        //      http.sendPost();
-//
-//    }
+    private String formatStringg(String string)
+    {
+        String finalString = "";
+        boolean insideQuotes = false;
+        for (int i =0; i< string.length(); i++)
+        {
+            if (string.charAt(i)=='#' && !insideQuotes)
+                insideQuotes = true;
+            else if (string.charAt(i)=='#' && insideQuotes)
+                insideQuotes = false;
+            else if (insideQuotes)
+                finalString = finalString.concat(string.charAt(i)+ "");
+        }
+        return finalString;
+    }
 
     // HTTP GET request
         public String sendGet() throws Exception {
@@ -38,7 +42,6 @@ public class HttpRequest {
         //add request header
         con.setRequestProperty("User-Agent", USER_AGENT);
 
-        int responseCode = con.getResponseCode();
         //  System.out.println("\nSending 'GET' request to URL : " + url);
         //  System.out.println("Response Code : " + responseCode);
 
@@ -48,29 +51,13 @@ public class HttpRequest {
         StringBuffer response = new StringBuffer();
 
         while ((inputLine = in.readLine()) != null) {
-            //System.out.println(inputLine);
-//            boolean insideQuotes = false;
-//            for (int i =0 ; i < inputLine.length(); i++)
-//            {
-//                if(inputLine.charAt(i)== '"' && !insideQuotes)
-//                {
-//                    insideQuotes = true;
-//                }
-//                if(inputLine.charAt(i)== '"' && insideQuotes)
-//                {
-//                    insideQuotes = false;
-//                }
-//                if (insideQuotes)
-//                    response.append(inputLine.charAt(i));
-//            }
-//
         response.append((String)inputLine);
         }
         in.close();
-
-        //print result
-        // System.out.println(response.toString());
-        return response.toString();
+            String response1 = response.toString();
+            response1 = response1.replace('"','#');
+        System.out.println(response1);
+        return formatStringg(response1);
 
     }
 
