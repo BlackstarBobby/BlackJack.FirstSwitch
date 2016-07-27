@@ -7,6 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by Mihai on 16-Jul-16.
  */
+
 public class PlayerBehaviour
 {
     private ArrayList<Card> notAces; //the cards of each player
@@ -15,7 +16,8 @@ public class PlayerBehaviour
     private int total;
     private String name;
 
-    public PlayerBehaviour(String name) {
+    public PlayerBehaviour(String name)
+    {
         cards = new ArrayList<Card>();
         aces = new ArrayList<Card>();
         notAces = new ArrayList<Card>();

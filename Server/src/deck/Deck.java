@@ -11,7 +11,7 @@ public class Deck
 {
     public enum Suit
     {
-        diamons, hearts, spades, clubs
+        diamonds, hearts, spades, clubs
     }
     private ArrayList<Card> cards;
 

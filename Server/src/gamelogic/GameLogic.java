@@ -26,6 +26,7 @@ public class GameLogic
 
     public void startGame()
     {
+    	setPlayersOrder();
         setTwoCards();
         showCards();
 
@@ -36,12 +37,21 @@ public class GameLogic
         sendResults();
         server.setGameOver(true);
     }
+    
+    private void setPlayersOrder()
+    {
+    	for(int i = 0; i < server.getNumberOfPlayers(); i++)
+    	{
+    		server.getThreads().get(i).sendToClient("Your turn is " + (i + 1));
+    	}
+    }
 
     private void setTwoCards()
     {
         Card card;
         for(int i = 0; i < server.getNumberOfPlayers(); i++)
-        {   card = deck.drawCard();
+        {   
+        	card = deck.drawCard();
             server.getThreads().get(i).addCard(card);
             card = deck.drawCard();
             server.getThreads().get(i).addCard(card);
@@ -58,12 +68,12 @@ public class GameLogic
         {
             for(int j = 0; j < server.getNumberOfPlayers(); j++)
             {
-
-                server.getThreads().get(j).sendToClient("Player" + (i + 1));
+                server.getThreads().get(j).sendToClient("Player " + (i + 1));
                 server.getThreads().get(j).sendToClient(server.getThreads().get(i).getCards().get(0));
                 server.getThreads().get(j).sendToClient(server.getThreads().get(i).getCards().get(1));
                 server.getThreads().get(j).sendToClient(server.getThreads().get(i).getTotal());
             }
+            
         }
 
         for(int i = 0 ; i < server.getNumberOfPlayers(); i++)
@@ -75,11 +85,17 @@ public class GameLogic
 
     public void playersTurn()
     {
+    	for (int i = 0; i < server.getNumberOfPlayers(); i++)
+    		server.getThreads().get(i).sendToClient("Player " + (server.getTurn() + 1));
         while(server.getTurn() < server.getNumberOfPlayers())
         {
             if(server.getThreads().get(server.getTurn()).isFinished())
+            {
                 server.setTurn(server.getTurn() + 1);
-
+                if (server.getTurn() < server.getNumberOfPlayers())
+                	for (int i = 0; i < server.getNumberOfPlayers(); i++)
+                		server.getThreads().get(i).sendToClient("Player " + (server.getTurn() + 1));
+            }
         }
     }
 
@@ -95,7 +111,7 @@ public class GameLogic
     {
         for(int i = 0; i < server.getNumberOfPlayers(); i++)
         {
-            server.getThreads().get(i).sendToClient("Dealer's turn");
+            server.getThreads().get(i).sendToClient("Dealer");
             server.getThreads().get(i).sendToClient(dealer.getCards().get(1));
         }
         Card card;
@@ -121,18 +137,22 @@ public class GameLogic
                 {
                     if(dealer.getTotal() > server.getThreads().get(i).getTotal())
                     {
+                    	server.getThreads().get(i).sendToClient("Player " + (i + 1));
                         server.getThreads().get(i).sendToClient("LOSE");
                     }
                     else if (dealer.getTotal() == server.getThreads().get(i).getTotal())
                     {
+                    	server.getThreads().get(i).sendToClient("Player " + (i + 1));
                         server.getThreads().get(i).sendToClient("DRAW");
                     }
                     else
                     {
+                    	server.getThreads().get(i).sendToClient("Player " + (i + 1));
                         server.getThreads().get(i).sendToClient("WIN");
                     }
                 }
                 else {
+                	server.getThreads().get(i).sendToClient("Player " + (i + 1));
                     server.getThreads().get(i).sendToClient("Dealer Busted! You Win");
                 }
             }

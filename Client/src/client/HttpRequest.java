@@ -58,7 +58,6 @@ public class HttpRequest {
             response1 = response1.replace('"','#');
         System.out.println(response1);
         return formatStringg(response1);
-
     }
 
 }

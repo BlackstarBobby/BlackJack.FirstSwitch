@@ -54,7 +54,7 @@ public class Card implements Serializable
     public String toString()
     {
         String result = "";
-        if(value == 1)
+        if(value == 11)
         {
             result = "ace_of_" + suit;
         }
@@ -70,7 +70,7 @@ public class Card implements Serializable
         {
             result = "king_of_" + suit;
         }
-        if(value <= 10 && value != 1)
+        if(value <= 10)
         {
             result = value + "_of_" + suit;
         }

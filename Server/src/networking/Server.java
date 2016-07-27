@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +16,6 @@ import java.util.concurrent.Executors;
 /**
  * Created by Mihai on 15-Jul-16.
  */
-
 public class Server
 {
     private static ServerSocket serverSocket;
@@ -36,7 +36,7 @@ public class Server
 
     private GameLogic game;
 
-    Timer timer;
+    private Timer timer;
     public Server()
     {
         threadPool = Executors.newCachedThreadPool();
@@ -52,6 +52,8 @@ public class Server
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+
+      
 
     }
 
@@ -93,9 +95,9 @@ public class Server
                 System.out.println("No more clients can connect");
             }
 
-           
         }
-
+      
+        
         game = new GameLogic(this);
         game.startGame();
 
